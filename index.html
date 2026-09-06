@@ -3,136 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rohan Thapliyal - Resume</title>
-    <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            line-height: 1.6; 
-            margin: 0; 
-            padding: 40px 20px; 
-            background-color: #f8f9fa; 
-            color: #333; 
-        }
-        .container { 
-            max-width: 850px; 
-            margin: auto; 
-            background: #ffffff; 
-            padding: 40px; 
-            border-radius: 8px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
-        }
-        h1 { 
-            color: #2c3e50; 
-            margin-bottom: 5px; 
-            font-size: 2.5em;
-        }
-        h2 { 
-            color: #34495e; 
-            border-bottom: 2px solid #ecf0f1; 
-            padding-bottom: 8px; 
-            margin-top: 35px; 
-            font-size: 1.5em;
-        }
-        .subtitle { 
-            color: #7f8c8d; 
-            font-size: 1.2em; 
-            margin-top: 0; 
-            font-weight: 500;
-        }
-        .skills-list { 
-            display: flex; 
-            flex-wrap: wrap; 
-            gap: 10px; 
-            padding: 0; 
-            list-style: none; 
-        }
-        .skills-list li { 
-            background: #e2e8f0; 
-            color: #4a5568; 
-            padding: 6px 14px; 
-            border-radius: 20px; 
-            font-size: 0.9em; 
-            font-weight: 600;
-        }
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-top: 15px; 
-        }
-        th, td { 
-            text-align: left; 
-            padding: 12px; 
-            border-bottom: 1px solid #edf2f7; 
-        }
-        th { 
-            background-color: #f7fafc; 
-            color: #4a5568;
-        }
-        ul.experience-list {
-            padding-left: 20px;
-        }
-        ul.experience-list li {
-            margin-bottom: 10px;
-        }
-    </style>
+    <title>Rohan Thapliyal - Home</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Rohan Thapliyal</h1>
-            <p class="subtitle">Full Stack Developer | AI & Cloud Infrastructure</p>
-        </header>
+    <nav>
+<a href="index.html" class="active">Home</a>
+<a href="experience.html" >Experience</a>
+<a href="projects.html" >Projects</a>
+<a href="skills.html" >Skills</a>
+</nav>
+    <div class="container text-center">
+        <!-- Replace the src below with the actual path to your profile picture -->
+        <img src="https://via.placeholder.com/180" alt="Rohan Thapliyal" class="pfp">
+        
+        <h1>Rohan Thapliyal</h1>
+        
+        <div class="contact-info">
+            <a href="mailto:your.email@example.com">Email</a> | 
+            <a href="https://github.com/yourusername" target="_blank">GitHub</a> | 
+            <a href="https://linkedin.com/in/yourusername" target="_blank">LinkedIn</a>
+        </div>
 
-        <section>
-            <h2>Education</h2>
-            <ul class="experience-list">
-                <li><strong>Oregon State University</strong> — Master of Science in Artificial Intelligence (Expected Spring 2027)</li>
-                <li><strong>Oregon State University</strong> — Bachelor of Science in Computer Science</li>
-            </ul>
-        </section>
-
-        <section>
-            <h2>Experience</h2>
-            <table>
-                <tr>
-                    <th>Role</th>
-                    <th>Organization</th>
-                </tr>
-                <tr>
-                    <td>Full Stack Web Developer</td>
-                    <td>Tekbots (Tektronix)</td>
-                </tr>
-                <tr>
-                    <td>Project Assistant Researcher</td>
-                    <td>OSU College of Agricultural Sciences</td>
-                </tr>
-            </table>
-        </section>
-
-        <section>
-            <h2>Key Projects</h2>
-            <ul class="experience-list">
-                <li><strong>OpenBeavs (Genesis Hub):</strong> DevOps Lead managing continuous deployment pipelines, Google Cloud Run infrastructure, and multi-agent AI architecture on GCP.</li>
-                <li><strong>MEng Assessment Tool:</strong> Lead Full Stack Developer creating PHP backend functions, database integrations, and interface components.</li>
-                <li><strong>Movie Review Sentiment Analysis:</strong> Implemented and evaluated 1D CNNs and artificial neural networks on the IMDB dataset.</li>
-            </ul>
-        </section>
-
-        <section>
-            <h2>Technical Skills</h2>
-            <ul class="skills-list">
-                <li>Python</li>
-                <li>C++</li>
-                <li>PHP</li>
-                <li>JavaScript / TypeScript</li>
-                <li>SQL</li>
-                <li>Docker</li>
-                <li>Google Cloud Platform (GCP)</li>
-                <li>PyTorch</li>
-                <li>TensorFlow</li>
-                <li>Arduino / ESP32</li>
-            </ul>
-        </section>
+        <h2>Current Status</h2>
+        <p class="subtitle">
+            Student at Oregon State University<br>
+            Pursuing a B.S. in Computer Science & Accelerated M.S. in Artificial Intelligence
+        </p>
     </div>
 </body>
 </html>
