@@ -8,12 +8,18 @@
 </head>
 <body>
     <nav>
-<a href="index.html" class="active">Home</a>
-<a href="experience.html" >Experience</a>
-<a href="projects.html" >Projects</a>
-<a href="skills.html" >Skills</a>
-</nav>
-    <div class="container text-center">
+        <a href="index.html" class="active">Home</a>
+        <a href="experience.html" >Experience</a>
+        <a href="projects.html" >Projects</a>
+        <a href="skills.html" >Skills</a>
+    </nav>
+    
+    <!-- Added id="main-container" here -->
+    <div class="container text-center" id="main-container">
+        
+        <!-- Added the cursor dot div here -->
+        <div class="cursor-dot" id="cursor-dot"></div>
+
         <!-- Replace the src below with the actual path to your profile picture -->
         <img src="IMG_7484.jpeg" alt="Rohan Thapliyal" class="pfp">
         
@@ -31,6 +37,7 @@
             B.S. in Computer Science & Pursuing an M.S. in Artificial Intelligence
         </p>
     </div>
+    
     <div class="hover-cards-container">
         <div class="hover-card">
             <h3>AI Architecture</h3>
@@ -45,5 +52,20 @@
             <p>Crafting dynamic frontends and robust APIs with React, TypeScript, and Node.</p>
         </div>
     </div>
+
+    <!-- Added the cursor dot script here -->
+    <script>
+        const container = document.getElementById('main-container');
+        const dot = document.getElementById('cursor-dot');
+
+        container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            dot.style.left = `${x}px`;
+            dot.style.top = `${y}px`;
+        });
+    </script>
 </body>
 </html>
