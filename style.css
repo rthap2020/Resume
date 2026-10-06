@@ -245,14 +245,20 @@ ul.experience-list li {
 /* --- Interactive Hover Cards --- */
 .hover-cards-container {
     display: flex;
-    flex-direction: column; /* Stacks the cards vertically into their own rows */
+    flex-direction: column;
     gap: 20px;
-    margin-top: 45px;
+    margin: 45px auto 60px auto; /* Centers the div horizontally with auto margins */
+    width: 100%; 
+    max-width: 850px; /* Restricts expansion to exactly match your main container */
+    box-sizing: border-box; /* Prevents padding from breaking the width calculation */
+    padding: 0 20px; /* Adds safe spacing on mobile screens */
 }
 
 .hover-card {
     background: #ffffff;
-    padding: 25px 20px;
+    width: 100%; /* Forces the card to stretch fully */
+    box-sizing: border-box; /* Ensures padding doesn't add extra width causing overflow */
+    padding: 25px 30px;
     border-radius: 12px;
     border: 1px solid #e2e8f0;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
