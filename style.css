@@ -339,22 +339,26 @@ ul.experience-list li {
     transform: translateX(3px);
 }
 
-/* --- Floating Aesthetic Cursor --- */
+/* --- Washing Aesthetic Cursor --- */
 .cursor-dot {
     position: absolute;
-    width: 36px;
-    height: 36px;
-    border: 2px solid rgba(59, 130, 246, 0.7);
-    background-color: rgba(59, 130, 246, 0.1);
-    box-shadow: 0 0 15px rgba(59, 130, 246, 0.4), inset 0 0 10px rgba(59, 130, 246, 0.2);
+    width: 500px; /* Large enough to create a wash effect */
+    height: 500px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0) 65%);
     border-radius: 50%;
     pointer-events: none; 
     transform: translate(-50%, -50%); 
-    opacity: 0;
-    transition: opacity 0.4s ease; 
-    z-index: 10;
+    opacity: 0; /* Starts hidden */
+    transition: opacity 0.4s ease-out; /* Smoothly fades out when stopped */
+    z-index: 0; /* Keeps it behind the text */
 }
 
-#main-container:hover .cursor-dot {
-    opacity: 1;
+/* Ensures your profile content sits above the wash */
+#main-container > img,
+#main-container > h1,
+#main-container > .contact-info, /* Changed from 'div' to specifically target the contact info */
+#main-container > h2,
+#main-container > p {
+    position: relative;
+    z-index: 1;
 }
