@@ -53,19 +53,44 @@
         </div>
     </div>
 
-    <!-- Added the cursor dot script here -->
+    <!-- Aesthetic Cursor Script -->
     <script>
         const container = document.getElementById('main-container');
         const dot = document.getElementById('cursor-dot');
 
+        let mouseX = 0, mouseY = 0;
+        let dotX = 0, dotY = 0;
+
         container.addEventListener('mousemove', (e) => {
             const rect = container.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            dot.style.left = `${x}px`;
-            dot.style.top = `${y}px`;
+            mouseX = e.clientX - rect.left;
+            mouseY = e.clientY - rect.top;
         });
+
+        function animate() {
+            // 1. Smooth trailing effect (Lerp)
+            dotX += (mouseX - dotX) * 0.15; // Lower number = slower, smoother trail
+            dotY += (mouseY - dotY) * 0.15;
+            
+            dot.style.left = `${dotX}px`;
+            dot.style.top = `${dotY}px`;
+
+            // 2. Calculate movement speed for dynamic scaling
+            const dx = mouseX - dotX;
+            const dy = mouseY - dotY;
+            const speed = Math.sqrt(dx * dx + dy * dy);
+            
+            // Expand the dot slightly based on how fast the mouse is moving
+            const scale = 1 + Math.min(speed * 0.015, 0.4); 
+
+            dot.style.transform = `translate(-50%, -50%) scale(${scale})`;
+
+            // 3. Loop the animation natively with the browser's refresh rate
+            requestAnimationFrame(animate);
+        }
+        
+        // Start the animation loop
+        animate();
     </script>
 </body>
 </html>

@@ -338,3 +338,23 @@ ul.experience-list li {
     color: #0284c7;
     transform: translateX(3px);
 }
+
+/* --- Floating Aesthetic Cursor --- */
+.cursor-dot {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    border: 2px solid rgba(59, 130, 246, 0.7);
+    background-color: rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.4), inset 0 0 10px rgba(59, 130, 246, 0.2);
+    border-radius: 50%;
+    pointer-events: none; 
+    transform: translate(-50%, -50%); 
+    opacity: 0;
+    transition: opacity 0.4s ease; 
+    z-index: 10;
+}
+
+#main-container:hover .cursor-dot {
+    opacity: 1;
+}
