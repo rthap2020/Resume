@@ -14,7 +14,6 @@
             <a href="projects.html">Projects</a>
             <a href="skills.html">Skills</a>
         </div>
-        <!-- Dark Mode Toggle Button -->
         <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
             🌙
         </button>
@@ -56,9 +55,7 @@
         </div>
     </div>
 
-    <!-- Theme Initializer & Washing Cursor Script -->
     <script>
-        // Check local storage for saved theme preference
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
         const themeToggleBtn = document.getElementById('theme-toggle');
@@ -73,7 +70,6 @@
             themeToggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
         });
 
-        // Washing Cursor Script
         const container = document.getElementById('main-container');
         const dot = document.getElementById('cursor-dot');
 
