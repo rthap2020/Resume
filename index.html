@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,19 +8,21 @@
 </head>
 <body>
     <nav>
-        <a href="index.html" class="active">Home</a>
-        <a href="experience.html" >Experience</a>
-        <a href="projects.html" >Projects</a>
-        <a href="skills.html" >Skills</a>
+        <div class="nav-links">
+            <a href="index.html" class="active">Home</a>
+            <a href="experience.html">Experience</a>
+            <a href="projects.html">Projects</a>
+            <a href="skills.html">Skills</a>
+        </div>
+        <!-- Dark Mode Toggle Button -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+            🌙
+        </button>
     </nav>
     
-    <!-- Added id="main-container" here -->
     <div class="container text-center" id="main-container">
-        
-        <!-- Added the cursor dot div here -->
         <div class="cursor-dot" id="cursor-dot"></div>
 
-        <!-- Replace the src below with the actual path to your profile picture -->
         <img src="IMG_7484.jpeg" alt="Rohan Thapliyal" class="pfp">
         
         <h1>Rohan Thapliyal</h1>
@@ -54,8 +56,24 @@
         </div>
     </div>
 
-    <!-- Washing Cursor Script -->
+    <!-- Theme Initializer & Washing Cursor Script -->
     <script>
+        // Check local storage for saved theme preference
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        themeToggleBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        });
+
+        // Washing Cursor Script
         const container = document.getElementById('main-container');
         const dot = document.getElementById('cursor-dot');
 
@@ -68,33 +86,26 @@
             mouseX = e.clientX - rect.left;
             mouseY = e.clientY - rect.top;
             
-            // Fade in the wash while moving
             dot.style.opacity = '1';
-            
-            // Clear the timer every time the mouse moves
             clearTimeout(moveTimer);
             
-            // Set a timer to fade it out if the mouse stops moving
             moveTimer = setTimeout(() => {
                 dot.style.opacity = '0';
-            }, 150); // Adjust this number to make it fade faster or slower
+            }, 150);
         });
 
-        // Hide immediately if the mouse leaves the container completely
         container.addEventListener('mouseleave', () => {
             dot.style.opacity = '0';
             clearTimeout(moveTimer);
         });
 
         function animate() {
-            // Smooth trailing effect
             dotX += (mouseX - dotX) * 0.12; 
             dotY += (mouseY - dotY) * 0.12;
             
             dot.style.left = `${dotX}px`;
             dot.style.top = `${dotY}px`;
 
-            // Expand the wash slightly when moving fast for a splashing effect
             const dx = mouseX - dotX;
             const dy = mouseY - dotY;
             const speed = Math.sqrt(dx * dx + dy * dy);

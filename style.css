@@ -1,6 +1,45 @@
 /* Import modern font */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
+/* --- Theme Variables --- */
+:root {
+    --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    --body-color: #1e293b;
+    --nav-bg: rgba(255, 255, 255, 0.7);
+    --nav-border: rgba(255, 255, 255, 0.3);
+    --nav-link-color: #64748b;
+    --container-bg: #ffffff;
+    --card-bg: #ffffff;
+    --card-border: #e2e8f0;
+    --heading-color: #0f172a;
+    --subheading-color: #1e293b;
+    --subtitle-color: #64748b;
+    --border-color: #e2e8f0;
+    --table-td-bg: #f8fafc;
+    --table-td-border: #f1f5f9;
+    --table-hover-bg: #f1f5f9;
+    --cursor-wash: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0) 65%);
+}
+
+[data-theme="dark"] {
+    --bg-gradient: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+    --body-color: #f1f5f9;
+    --nav-bg: rgba(15, 23, 42, 0.8);
+    --nav-border: rgba(255, 255, 255, 0.05);
+    --nav-link-color: #94a3b8;
+    --container-bg: #1e293b;
+    --card-bg: #0f172a;
+    --card-border: #334155;
+    --heading-color: #f8fafc;
+    --subheading-color: #f1f5f9;
+    --subtitle-color: #94a3b8;
+    --border-color: #334155;
+    --table-td-bg: #0f172a;
+    --table-td-border: #334155;
+    --table-hover-bg: #334155;
+    --cursor-wash: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0) 65%);
+}
+
 /* --- Keyframe Animations --- */
 @keyframes fadeInUp {
     from {
@@ -25,28 +64,36 @@ body {
     line-height: 1.6;
     margin: 0;
     padding: 0;
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
-    color: #1e293b;
+    background: var(--bg-gradient);
+    color: var(--body-color);
     min-height: 100vh;
     scroll-behavior: smooth;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* --- Navigation (Glassmorphism) --- */
+/* --- Navigation (Glassmorphism & Flex Layout) --- */
 nav {
-    background: rgba(255, 255, 255, 0.7);
+    background: var(--nav-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    padding: 18px 0;
-    text-align: center;
+    padding: 14px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     position: sticky;
     top: 0;
     z-index: 1000;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid var(--nav-border);
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.nav-links {
+    margin: 0 auto;
 }
 
 nav a {
-    color: #64748b;
+    color: var(--nav-link-color);
     text-decoration: none;
     margin: 0 15px;
     font-weight: 600;
@@ -60,17 +107,40 @@ nav a:hover, nav a.active {
     transform: translateY(-2px);
 }
 
+/* --- Theme Toggle Button --- */
+.theme-toggle {
+    background: none;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+    position: absolute;
+    right: 30px;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+    background-color: var(--card-bg);
+}
+
 /* --- Main Container --- */
 .container {
     max-width: 850px;
     margin: 60px auto;
-    background: #ffffff;
+    background: var(--container-bg);
     padding: 50px;
     border-radius: 16px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
     animation: fadeInUp 0.8s ease-out forwards;
     position: relative; /* Establishes coordinate grid for cursor dot */
     overflow: hidden; /* Keeps cursor dot inside borders */
+    transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .text-center {
@@ -83,11 +153,11 @@ nav a:hover, nav a.active {
     height: 180px;
     border-radius: 50%;
     object-fit: cover;
-    border: 6px solid #ffffff;
+    border: 6px solid var(--container-bg);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     margin-bottom: 25px;
     animation: float 6s ease-in-out infinite;
-    transition: transform 0.4s ease;
+    transition: transform 0.4s ease, border-color 0.3s ease;
 }
 
 .pfp:hover {
@@ -97,27 +167,30 @@ nav a:hover, nav a.active {
 
 /* --- Typography --- */
 h1 {
-    color: #0f172a;
+    color: var(--heading-color);
     margin-bottom: 8px;
     font-size: 3em;
     font-weight: 700;
     letter-spacing: -1px;
+    transition: color 0.3s ease;
 }
 
 h2 {
-    color: #1e293b;
-    border-bottom: 2px solid #e2e8f0;
+    color: var(--subheading-color);
+    border-bottom: 2px solid var(--border-color);
     padding-bottom: 10px;
     margin-top: 35px;
     font-size: 1.6em;
     font-weight: 600;
+    transition: color 0.3s ease, border-color 0.3s ease;
 }
 
 .subtitle {
-    color: #64748b;
+    color: var(--subtitle-color);
     font-size: 1.25em;
     margin-top: 0;
     font-weight: 400;
+    transition: color 0.3s ease;
 }
 
 /* --- Contact Links --- */
@@ -166,12 +239,12 @@ h2 {
 }
 
 .hover-card {
-    background: #ffffff;
+    background: var(--card-bg);
     width: 100%; 
     box-sizing: border-box; 
     padding: 25px 30px;
     border-radius: 12px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--card-border);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
     cursor: pointer;
@@ -212,7 +285,7 @@ h2 {
 }
 
 .hover-card h3 {
-    color: #0f172a;
+    color: var(--heading-color);
     font-size: 1.2em;
     margin-top: 0;
     margin-bottom: 10px;
@@ -224,28 +297,11 @@ h2 {
 }
 
 .hover-card p {
-    color: #64748b;
+    color: var(--subtitle-color);
     font-size: 0.95em;
     margin: 0;
     line-height: 1.5;
-}
-
-/* --- Floating Cursor Dot --- */
-.cursor-dot {
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    background-color: rgba(59, 130, 246, 0.6);
-    border-radius: 50%;
-    pointer-events: none; 
-    transform: translate(-50%, -50%); 
-    opacity: 0;
-    transition: opacity 0.3s ease; 
-    z-index: 10;
-}
-
-#main-container:hover .cursor-dot {
-    opacity: 1;
+    transition: color 0.3s ease;
 }
 
 /* --- Skills Tags (Global for other pages) --- */
@@ -267,6 +323,12 @@ h2 {
     border: 1px solid #bfdbfe;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     cursor: default;
+}
+
+[data-theme="dark"] .skills-list li {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: #60a5fa;
+    border-color: #334155;
 }
 
 .skills-list li:hover {
@@ -291,7 +353,7 @@ th, td {
 
 th {
     background-color: transparent;
-    color: #64748b;
+    color: var(--subtitle-color);
     font-weight: 600;
     text-transform: uppercase;
     font-size: 0.85em;
@@ -299,22 +361,24 @@ th {
 }
 
 td {
-    background-color: #f8fafc;
-    border: 1px solid #f1f5f9;
+    background-color: var(--table-td-bg);
+    border: 1px solid var(--table-td-border);
+    color: var(--body-color);
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 td:first-child { border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
 td:last-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
 
 tr:hover td {
-    background-color: #f1f5f9;
+    background-color: var(--table-hover-bg);
     transform: scale(1.01);
     transition: all 0.2s ease;
 }
 
 ul.experience-list {
     padding-left: 20px;
-    color: #475569;
+    color: var(--subtitle-color);
 }
 
 ul.experience-list li {
@@ -344,7 +408,7 @@ ul.experience-list li {
     position: absolute;
     width: 500px; /* Large enough to create a wash effect */
     height: 500px;
-    background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0) 65%);
+    background: var(--cursor-wash);
     border-radius: 50%;
     pointer-events: none; 
     transform: translate(-50%, -50%); 
@@ -356,7 +420,7 @@ ul.experience-list li {
 /* Ensures your profile content sits above the wash */
 #main-container > img,
 #main-container > h1,
-#main-container > .contact-info, /* Changed from 'div' to specifically target the contact info */
+#main-container > .contact-info,
 #main-container > h2,
 #main-container > p {
     position: relative;
