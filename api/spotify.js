@@ -1,8 +1,8 @@
 import fetch from 'node-fetch';
 
-const CLIENT_ID = '22836f77707c48bf95742d0884c6c2e4';
-const CLIENT_SECRET = 'fd3fa621a41e479498995df4d0385f70';
-const REFRESH_TOKEN = 'AQC1LEvaAFW9ch6_YDwu52V8w7fwU-CWttk6LXdZOMqAmK141FmkunHLbrX5N4QcDvUyBHPDgzlsZmooppLwTNUClG5rVipD3dqxKU1ZeD7JYMr9Tn38daGY2ZAM0PKMDjk';
+const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
+const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
+const REFRESH_TOKEN = process.env.SPOTIFY_REFRESH_TOKEN;
 
 const BASIC_AUTH = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64');
 const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
