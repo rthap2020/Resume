@@ -5,52 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rohan Thapliyal - Home</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* Optional inline styling for the Spotify widget to match your design */
-        .spotify-widget {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin: 20px auto;
-            padding: 10px 16px;
-            max-width: 360px;
-            background: var(--card-bg, rgba(255, 255, 255, 0.05));
-            border: 1px solid var(--border-color, rgba(0, 0, 0, 0.1));
-            border-radius: 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            color: inherit;
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-        .spotify-widget:hover {
-            transform: translateY(-2px);
-            border-color: #1DB954;
-        }
-        .spotify-album-art {
-            width: 44px;
-            height: 44px;
-            border-radius: 6px;
-            object-fit: cover;
-        }
-        .spotify-info {
-            text-align: left;
-            overflow: hidden;
-        }
-        .spotify-title {
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .spotify-artist {
-            font-size: 0.8rem;
-            opacity: 0.7;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-    </style>
 </head>
 <body>
     <nav>
@@ -79,7 +33,7 @@
             <a href="Rohan-Thapliyal_Resume.pdf" download="Rohan-Thapliyal_Resume.pdf">Resume</a>
         </div>
 
-        <!-- Spotify Live Status Widget -->
+        <!-- Spotify Currently Playing Widget -->
         <div id="spotify-container"></div>
 
         <h2>Current Status</h2>
@@ -120,7 +74,7 @@
             themeToggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
         });
 
-        // Cursor Animation Logic
+        // Cursor Dot Animation Logic
         const container = document.getElementById('main-container');
         const dot = document.getElementById('cursor-dot');
 
@@ -165,24 +119,28 @@
         
         animate();
 
-        // Spotify Currently Playing Fetcher
+        // Spotify Currently Playing Logic
+        // Replace with your actual Spotify profile link/username
+        const SPOTIFY_PROFILE_URL = 'https://open.spotify.com/user/rohanthapliyal2020';
+
         async function fetchCurrentlyPlaying() {
             try {
                 const response = await fetch('https://resume-beta-nine.vercel.app/api/spotify');
                 const data = await response.json();
                 const spotifyContainer = document.getElementById('spotify-container');
 
-                if (!data.isPlaying) {
-                    spotifyContainer.innerHTML = ''; // Hide or show offline message if desired
+                if (!data || !data.isPlaying) {
+                    spotifyContainer.innerHTML = ''; // Hide when offline/paused
                     return;
                 }
 
                 spotifyContainer.innerHTML = `
-                    <a href="${data.songUrl}" target="_blank" class="spotify-widget">
+                    <a href="${SPOTIFY_PROFILE_URL}" target="_blank" rel="noopener noreferrer" class="spotify-widget">
                         <img src="${data.albumImageUrl}" alt="Album Art" class="spotify-album-art">
                         <div class="spotify-info">
+                            <div class="spotify-header">🎵 Listening to:</div>
                             <div class="spotify-title">${data.title}</div>
-                            <div class="spotify-artist">${data.artist}</div>
+                            <div class="spotify-artist">by ${data.artist}</div>
                         </div>
                     </a>
                 `;
@@ -191,7 +149,7 @@
             }
         }
 
-        // Fetch immediately and poll every 10 seconds
+        // Initial fetch and poll every 10 seconds
         fetchCurrentlyPlaying();
         setInterval(fetchCurrentlyPlaying, 10000);
     </script>

@@ -226,6 +226,73 @@ h2 {
     transform-origin: bottom left;
 }
 
+/* --- Spotify Widget Styles --- */
+#spotify-container {
+    position: relative;
+    z-index: 1;
+    margin: 20px 0;
+}
+
+.spotify-widget {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 18px;
+    max-width: 380px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: var(--body-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.spotify-widget:hover {
+    transform: translateY(-2px);
+    border-color: #1DB954;
+    box-shadow: 0 6px 20px rgba(29, 185, 84, 0.15);
+}
+
+.spotify-album-art {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.spotify-info {
+    text-align: left;
+    overflow: hidden;
+}
+
+.spotify-header {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #1DB954;
+    margin-bottom: 2px;
+}
+
+.spotify-title {
+    font-weight: 600;
+    color: var(--heading-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.spotify-artist {
+    font-size: 0.8rem;
+    color: var(--subtitle-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /* --- Interactive Hover Cards --- */
 .hover-cards-container {
     display: flex;
@@ -421,6 +488,7 @@ ul.experience-list li {
 #main-container > img,
 #main-container > h1,
 #main-container > .contact-info,
+#main-container > #spotify-container,
 #main-container > h2,
 #main-container > p {
     position: relative;
