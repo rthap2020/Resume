@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rohan Thapliyal - Film Journal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="experience.html">Experience</a>
+            <a href="projects.html">Projects</a>
+            <a href="skills.html">Skills</a>
+            <a href="films.html" class="active">Films</a>
+        </div>
+        <!-- Dark Mode Toggle Button -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+            🌙
+        </button>
+    </nav>
+    
+    <div class="container">
+        <h2>Film Journal</h2>
+        <p class="subtitle" id="journal-subtitle">Fetching latest entries from Letterboxd...</p>
+        
+        <div style="overflow-x: auto;">
+            <table id="films-table">
+                <thead>
+                    <tr>
+                        <th>Film</th>
+                        <th>Rating</th>
+                        <th>Watched On</th>
+                    </tr>
+                </thead>
+                <tbody id="films-tbody">
+                    <!-- Populated dynamically via RSS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Sync Theme Preference across pages
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            const themeToggle = document.getElementById('theme-toggle');
+            
+            if (themeToggle) {
+                themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+                themeToggle.addEventListener('click', () => {
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+                });
+            }
+
+            // 2. Fetch and Parse Letterboxd RSS directly
+            fetchLetterboxdFeed();
+        });
+
+        async function fetchLetterboxdFeed() {
+            const subtitle = document.getElementById('journal-subtitle');
+            const tbody = document.getElementById('films-tbody');
+            const rssUrl = 'https://letterboxd.com/rthap/rss/';
+            // Using corsproxy.io as a more robust proxy alternative
+            const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(rssUrl)}`;
+
+            try {
+                const response = await fetch(proxyUrl);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const xmlText = await response.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+                
+                const items = xmlDoc.querySelectorAll('item');
+
+                if (!items || items.length === 0) {
+                    if (subtitle) subtitle.textContent = 'No Letterboxd diary entries found.';
+                    return;
+                }
+
+                if (subtitle) {
+                    subtitle.textContent = `Showing latest ${items.length} films logged on Letterboxd`;
+                }
+
+                if (!tbody) return;
+                tbody.innerHTML = '';
+
+                items.forEach(item => {
+                    const titleTag = item.querySelector('title')?.textContent || '';
+                    const link = item.querySelector('link')?.textContent || '#';
+                    const pubDate = item.querySelector('pubDate')?.textContent || '';
+                    
+                    let filmTitle = titleTag;
+                    let rating = '—';
+
+                    // Extract star rating out of title text (e.g. "Dune: Part Two, 2024 - ★★★★½")
+                    const starMatch = titleTag.match(/[★½]+$/);
+                    if (starMatch) {
+                        const stars = starMatch[0];
+                        let count = (stars.match(/★/g) || []).length;
+                        if (stars.includes('½')) count += 0.5;
+                        rating = `${stars} (${count})`;
+                        filmTitle = titleTag.replace(starMatch[0], '').replace(/\s*-\s*$/, '').trim();
+                    }
+
+                    // Format watched date (YYYY-MM-DD)
+                    let watchedDate = '—';
+                    if (pubDate) {
+                        const d = new Date(pubDate);
+                        if (!isNaN(d)) watchedDate = d.toISOString().split('T')[0];
+                    }
+
+                    const tr = document.createElement('tr');
+
+                    // Film Title
+                    const titleTd = document.createElement('td');
+                    const a = document.createElement('a');
+                    a.href = link;
+                    a.textContent = filmTitle;
+                    a.target = '_blank';
+                    a.className = 'github-link';
+                    a.style.marginLeft = '0';
+                    titleTd.appendChild(a);
+
+                    // Rating
+                    const ratingTd = document.createElement('td');
+                    ratingTd.textContent = rating;
+
+                    // Watched Date
+                    const dateTd = document.createElement('td');
+                    dateTd.textContent = watchedDate;
+
+                    tr.appendChild(titleTd);
+                    tr.appendChild(ratingTd);
+                    tr.appendChild(dateTd);
+                    tbody.appendChild(tr);
+                });
+
+            } catch (error) {
+                console.error('Error fetching Letterboxd feed:', error);
+                if (subtitle) subtitle.textContent = 'Failed to load Letterboxd entries. Check console for details.';
+            }
+        }
+    </script>
+</body>
+</html>
