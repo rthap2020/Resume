@@ -5,6 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rohan Thapliyal - Home</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Optional inline styling for the Spotify widget to match your design */
+        .spotify-widget {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 20px auto;
+            padding: 10px 16px;
+            max-width: 360px;
+            background: var(--card-bg, rgba(255, 255, 255, 0.05));
+            border: 1px solid var(--border-color, rgba(0, 0, 0, 0.1));
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .spotify-widget:hover {
+            transform: translateY(-2px);
+            border-color: #1DB954;
+        }
+        .spotify-album-art {
+            width: 44px;
+            height: 44px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+        .spotify-info {
+            text-align: left;
+            overflow: hidden;
+        }
+        .spotify-title {
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .spotify-artist {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
 </head>
 <body>
     <nav>
@@ -18,41 +64,6 @@
             🌙
         </button>
     </nav>
-
-    <div class="spotify-card" id="spotify-widget" style="padding: 12px; border-radius: 8px; border: 1px solid var(--border-color, #eaeaea); max-width: 320px;">
-        <p id="spotify-status" style="margin: 0; font-size: 0.9em;">Loading Spotify...</p>
-    </div>
-
-    <script>
-        async function fetchCurrentlyPlaying() {
-            const statusElement = document.getElementById('spotify-status');
-            const container = document.getElementById('spotify-widget');
-
-            try {
-                const response = await fetch('/api/spotify');
-                const data = await response.json();
-
-                if (!data.isPlaying) {
-                    statusElement.textContent = 'Not playing anything right now 🎧';
-                    return;
-                }
-
-                container.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <img src="${data.albumImageUrl}" alt="${data.album}" style="width: 48px; height: 48px; border-radius: 4px; object-fit: cover;">
-                        <div style="overflow: hidden;">
-                            <a href="${data.songUrl}" target="_blank" style="font-weight: 600; text-decoration: none; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${data.title}</a>
-                            <p style="margin: 2px 0 0; color: #666; font-size: 0.85em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">by ${data.artist}</p>
-                        </div>
-                    </div>
-                `;
-            } catch (error) {
-                statusElement.textContent = 'Unable to load Spotify data.';
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', fetchCurrentlyPlaying);
-    </script>
     
     <div class="container text-center" id="main-container">
         <div class="cursor-dot" id="cursor-dot"></div>
@@ -67,6 +78,9 @@
             <a href="https://www.linkedin.com/in/rohan-thapliyal/" target="_blank">LinkedIn</a> | 
             <a href="Rohan-Thapliyal_Resume.pdf" download="Rohan-Thapliyal_Resume.pdf">Resume</a>
         </div>
+
+        <!-- Spotify Live Status Widget -->
+        <div id="spotify-container"></div>
 
         <h2>Current Status</h2>
         <p class="subtitle">
@@ -91,6 +105,7 @@
     </div>
 
     <script>
+        // Theme Toggle Logic
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
         const themeToggleBtn = document.getElementById('theme-toggle');
@@ -105,6 +120,7 @@
             themeToggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
         });
 
+        // Cursor Animation Logic
         const container = document.getElementById('main-container');
         const dot = document.getElementById('cursor-dot');
 
@@ -148,6 +164,36 @@
         }
         
         animate();
+
+        // Spotify Currently Playing Fetcher
+        async function fetchCurrentlyPlaying() {
+            try {
+                const response = await fetch('https://resume-beta-nine.vercel.app/api/spotify');
+                const data = await response.json();
+                const spotifyContainer = document.getElementById('spotify-container');
+
+                if (!data.isPlaying) {
+                    spotifyContainer.innerHTML = ''; // Hide or show offline message if desired
+                    return;
+                }
+
+                spotifyContainer.innerHTML = `
+                    <a href="${data.songUrl}" target="_blank" class="spotify-widget">
+                        <img src="${data.albumImageUrl}" alt="Album Art" class="spotify-album-art">
+                        <div class="spotify-info">
+                            <div class="spotify-title">${data.title}</div>
+                            <div class="spotify-artist">${data.artist}</div>
+                        </div>
+                    </a>
+                `;
+            } catch (error) {
+                console.error('Failed to fetch currently playing track:', error);
+            }
+        }
+
+        // Fetch immediately and poll every 10 seconds
+        fetchCurrentlyPlaying();
+        setInterval(fetchCurrentlyPlaying, 10000);
     </script>
 </body>
 </html>
