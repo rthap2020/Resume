@@ -7,6 +7,7 @@ const REFRESH_TOKEN = process.env.SPOTIFY_REFRESH_TOKEN;
 const BASIC_AUTH = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64');
 const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
 const NOW_PLAYING_ENDPOINT = `https://api.spotify.com/v1/me/player/currently-playing`;
+const RECENTLY_PLAYED_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played?limit=1`;
 
 async function getAccessToken() {
   const response = await fetch(TOKEN_ENDPOINT, {
@@ -33,31 +34,45 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Failed to refresh access token' });
     }
 
-    const spotifyRes = await fetch(NOW_PLAYING_ENDPOINT, {
-      headers: {
-        Authorization: `Bearer ${tokenData.access_token}`,
-      },
-    });
+    const headers = { Authorization: `Bearer ${tokenData.access_token}` };
 
-    if (spotifyRes.status === 204 || spotifyRes.status > 400) {
-      return res.status(200).json({ isPlaying: false });
+    // 1. Try to get currently playing track
+    const nowPlayingRes = await fetch(NOW_PLAYING_ENDPOINT, { headers });
+
+    if (nowPlayingRes.status === 200) {
+      const song = await nowPlayingRes.json();
+      if (song.item && song.is_playing) {
+        return res.status(200).json({
+          isPlaying: true,
+          title: song.item.name,
+          artist: song.item.artists.map((a) => a.name).join(', '),
+          album: song.item.album.name,
+          albumImageUrl: song.item.album.images[0]?.url,
+          songUrl: song.item.external_urls.spotify,
+        });
+      }
     }
 
-    const song = await spotifyRes.json();
+    // 2. Fallback: Fetch most recently played track
+    const recentRes = await fetch(RECENTLY_PLAYED_ENDPOINT, { headers });
+    if (recentRes.status === 200) {
+      const recentData = await recentRes.json();
+      const lastTrack = recentData.items[0]?.track;
 
-    if (!song.item) {
-      return res.status(200).json({ isPlaying: false });
+      if (lastTrack) {
+        return res.status(200).json({
+          isPlaying: false,
+          title: lastTrack.name,
+          artist: lastTrack.artists.map((a) => a.name).join(', '),
+          album: lastTrack.album.name,
+          albumImageUrl: lastTrack.album.images[0]?.url,
+          songUrl: lastTrack.external_urls.spotify,
+        });
+      }
     }
 
-    return res.status(200).json({
-      isPlaying: song.is_playing,
-      title: song.item.name,
-      artist: song.item.artists.map((a) => a.name).join(', '),
-      album: song.item.album.name,
-      albumImageUrl: song.item.album.images[0]?.url,
-      songUrl: song.item.external_urls.spotify,
-    });
+    return res.status(200).json({ isPlaying: false });
   } catch (error) {
-    return res.status(500).json({ error: 'Failed to fetch currently playing track' });
+    return res.status(500).json({ error: 'Failed to fetch Spotify status' });
   }
 }

@@ -33,7 +33,7 @@
             <a href="Rohan-Thapliyal_Resume.pdf" download="Rohan-Thapliyal_Resume.pdf">Resume</a>
         </div>
 
-        <!-- Spotify Currently Playing Widget -->
+        <!-- Spotify Currently / Recently Played Widget -->
         <div id="spotify-container"></div>
 
         <h2>Current Status</h2>
@@ -119,9 +119,9 @@
         
         animate();
 
-        // Spotify Currently Playing Logic
-        // Replace with your actual Spotify profile link/username
-        const SPOTIFY_PROFILE_URL = 'https://open.spotify.com/user/rohanthapliyal2020';
+        // Spotify Currently / Recently Played Logic
+        // Replace with your actual Spotify profile URL
+        const SPOTIFY_PROFILE_URL = 'https://open.spotify.com/user/rohanthapliyal';
 
         async function fetchCurrentlyPlaying() {
             try {
@@ -129,23 +129,26 @@
                 const data = await response.json();
                 const spotifyContainer = document.getElementById('spotify-container');
 
-                if (!data || !data.isPlaying) {
-                    spotifyContainer.innerHTML = ''; // Hide when offline/paused
+                if (!data || !data.title) {
+                    spotifyContainer.innerHTML = ''; 
                     return;
                 }
+
+                // Dynamic header depending on playback state
+                const headerText = data.isPlaying ? '🎵 Listening to:' : '🎧 Was listening to:';
 
                 spotifyContainer.innerHTML = `
                     <a href="${SPOTIFY_PROFILE_URL}" target="_blank" rel="noopener noreferrer" class="spotify-widget">
                         <img src="${data.albumImageUrl}" alt="Album Art" class="spotify-album-art">
                         <div class="spotify-info">
-                            <div class="spotify-header">🎵 Listening to:</div>
+                            <div class="spotify-header">${headerText}</div>
                             <div class="spotify-title">${data.title}</div>
                             <div class="spotify-artist">by ${data.artist}</div>
                         </div>
                     </a>
                 `;
             } catch (error) {
-                console.error('Failed to fetch currently playing track:', error);
+                console.error('Failed to fetch Spotify status:', error);
             }
         }
 
