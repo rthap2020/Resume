@@ -18,6 +18,41 @@
             🌙
         </button>
     </nav>
+
+    <div class="spotify-card" id="spotify-widget" style="padding: 12px; border-radius: 8px; border: 1px solid var(--border-color, #eaeaea); max-width: 320px;">
+        <p id="spotify-status" style="margin: 0; font-size: 0.9em;">Loading Spotify...</p>
+    </div>
+
+    <script>
+        async function fetchCurrentlyPlaying() {
+            const statusElement = document.getElementById('spotify-status');
+            const container = document.getElementById('spotify-widget');
+
+            try {
+                const response = await fetch('/api/spotify');
+                const data = await response.json();
+
+                if (!data.isPlaying) {
+                    statusElement.textContent = 'Not playing anything right now 🎧';
+                    return;
+                }
+
+                container.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <img src="${data.albumImageUrl}" alt="${data.album}" style="width: 48px; height: 48px; border-radius: 4px; object-fit: cover;">
+                        <div style="overflow: hidden;">
+                            <a href="${data.songUrl}" target="_blank" style="font-weight: 600; text-decoration: none; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${data.title}</a>
+                            <p style="margin: 2px 0 0; color: #666; font-size: 0.85em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">by ${data.artist}</p>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                statusElement.textContent = 'Unable to load Spotify data.';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchCurrentlyPlaying);
+    </script>
     
     <div class="container text-center" id="main-container">
         <div class="cursor-dot" id="cursor-dot"></div>
