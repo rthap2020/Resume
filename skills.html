@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,8 @@
 </head>
 <body>
     <nav>
-        <div class="nav-links">
+        <button id="hamburger-btn" class="hamburger" aria-label="Toggle Navigation">☰</button>
+        <div class="nav-links" id="nav-links">
             <a href="index.html">Home</a>
             <a href="experience.html">Experience</a>
             <a href="projects.html">Projects</a>
@@ -35,6 +36,14 @@
         </ul>
     </div>
     <script>
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const navLinks = document.getElementById('nav-links');
+        if (hamburgerBtn && navLinks) {
+            hamburgerBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
         const themeToggleBtn = document.getElementById('theme-toggle');

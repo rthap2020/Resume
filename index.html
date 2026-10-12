@@ -8,7 +8,8 @@
 </head>
 <body>
     <nav>
-        <div class="nav-links">
+        <button id="hamburger-btn" class="hamburger" aria-label="Toggle Navigation">☰</button>
+        <div class="nav-links" id="nav-links">
             <a href="index.html" class="active">Home</a>
             <a href="experience.html">Experience</a>
             <a href="projects.html">Projects</a>
@@ -33,8 +34,11 @@
             <a href="Rohan-Thapliyal_Resume.pdf" download="Rohan-Thapliyal_Resume.pdf">Resume</a>
         </div>
 
-        <!-- Spotify Currently / Recently Played Widget -->
-        <div id="spotify-container"></div>
+        <!-- Activity Widgets Container (Spotify + Currently Reading) -->
+        <div id="activity-widgets">
+            <div id="spotify-container"></div>
+            <div id="books-container"></div>
+        </div>
 
         <h2>Current Status</h2>
         <p class="subtitle">
@@ -59,6 +63,15 @@
     </div>
 
     <script>
+        // Mobile Dropdown Nav Toggle
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const navLinks = document.getElementById('nav-links');
+        if (hamburgerBtn && navLinks) {
+            hamburgerBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+
         // Theme Toggle Logic
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
@@ -120,7 +133,6 @@
         animate();
 
         // Spotify Currently / Recently Played Logic
-        // Replace with your actual Spotify profile URL
         const SPOTIFY_PROFILE_URL = 'https://open.spotify.com/user/rohanthapliyal2020';
 
         async function fetchCurrentlyPlaying() {
@@ -134,16 +146,15 @@
                     return;
                 }
 
-                // Dynamic header depending on playback state
                 const headerText = data.isPlaying ? '🎵 Listening to:' : '🎧 Was listening to:';
 
                 spotifyContainer.innerHTML = `
-                    <a href="${SPOTIFY_PROFILE_URL}" target="_blank" rel="noopener noreferrer" class="spotify-widget">
-                        <img src="${data.albumImageUrl}" alt="Album Art" class="spotify-album-art">
-                        <div class="spotify-info">
-                            <div class="spotify-header">${headerText}</div>
-                            <div class="spotify-title">${data.title}</div>
-                            <div class="spotify-artist">by ${data.artist}</div>
+                    <a href="${SPOTIFY_PROFILE_URL}" target="_blank" rel="noopener noreferrer" class="activity-widget spotify-widget">
+                        <img src="${data.albumImageUrl}" alt="Album Art" class="widget-icon-img">
+                        <div class="widget-info">
+                            <div class="widget-header spotify-header">${headerText}</div>
+                            <div class="widget-title">${data.title}</div>
+                            <div class="widget-subtitle">by ${data.artist}</div>
                         </div>
                     </a>
                 `;
@@ -152,9 +163,40 @@
             }
         }
 
-        // Initial fetch and poll every 10 seconds
+        // Currently Reading Books Logic
+        async function fetchCurrentlyReading() {
+            try {
+                const response = await fetch('https://booky-navy.vercel.app/api/books');
+                const books = await response.json();
+                const booksContainer = document.getElementById('books-container');
+
+                if (!Array.isArray(books) || books.length === 0) {
+                    booksContainer.innerHTML = '';
+                    return;
+                }
+
+                const currentBook = books[0];
+
+                booksContainer.innerHTML = `
+                    <div class="activity-widget book-widget">
+                        <div class="widget-icon-emoji">📖</div>
+                        <div class="widget-info">
+                            <div class="widget-header book-header">📚 Reading:</div>
+                            <div class="widget-title">${currentBook.title}</div>
+                            <div class="widget-subtitle">by ${currentBook.author}</div>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Failed to fetch currently reading book:', error);
+            }
+        }
+
         fetchCurrentlyPlaying();
+        fetchCurrentlyReading();
+
         setInterval(fetchCurrentlyPlaying, 10000);
+        setInterval(fetchCurrentlyReading, 60000);
     </script>
 </body>
 </html>

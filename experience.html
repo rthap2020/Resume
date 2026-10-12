@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,8 @@
 </head>
 <body>
     <nav>
-        <div class="nav-links">
+        <button id="hamburger-btn" class="hamburger" aria-label="Toggle Navigation">☰</button>
+        <div class="nav-links" id="nav-links">
             <a href="index.html">Home</a>
             <a href="experience.html" class="active">Experience</a>
             <a href="projects.html">Projects</a>
@@ -20,20 +21,22 @@
     </nav>
     <div class="container">
         <h2>Experience</h2>
-        <table>
-            <tr>
-                <th>Role</th>
-                <th>Organization</th>
-            </tr>
-            <tr>
-                <td>Full Stack Web Developer</td>
-                <td>Tekbots (Tektronix)</td>
-            </tr>
-            <tr>
-                <td>Project Assistant Researcher</td>
-                <td>OSU College of Agricultural Sciences</td>
-            </tr>
-        </table>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>Role</th>
+                    <th>Organization</th>
+                </tr>
+                <tr>
+                    <td>Full Stack Web Developer</td>
+                    <td>Tekbots (Tektronix)</td>
+                </tr>
+                <tr>
+                    <td>Project Assistant Researcher</td>
+                    <td>OSU College of Agricultural Sciences</td>
+                </tr>
+            </table>
+        </div>
 
         <h2>Education</h2>
         <ul class="experience-list">
@@ -42,6 +45,14 @@
         </ul>
     </div>
     <script>
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const navLinks = document.getElementById('nav-links');
+        if (hamburgerBtn && navLinks) {
+            hamburgerBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
         const themeToggleBtn = document.getElementById('theme-toggle');

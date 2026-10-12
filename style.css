@@ -5,7 +5,7 @@
 :root {
     --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
     --body-color: #1e293b;
-    --nav-bg: rgba(255, 255, 255, 0.7);
+    --nav-bg: rgba(255, 255, 255, 0.85);
     --nav-border: rgba(255, 255, 255, 0.3);
     --nav-link-color: #64748b;
     --container-bg: #ffffff;
@@ -24,7 +24,7 @@
 [data-theme="dark"] {
     --bg-gradient: linear-gradient(135deg, #0f172a 0%, #020617 100%);
     --body-color: #f1f5f9;
-    --nav-bg: rgba(15, 23, 42, 0.8);
+    --nav-bg: rgba(15, 23, 42, 0.9);
     --nav-border: rgba(255, 255, 255, 0.05);
     --nav-link-color: #94a3b8;
     --container-bg: #1e293b;
@@ -90,6 +90,8 @@ nav {
 
 .nav-links {
     margin: 0 auto;
+    display: flex;
+    align-items: center;
 }
 
 nav a {
@@ -105,6 +107,26 @@ nav a {
 nav a:hover, nav a.active {
     color: #3b82f6;
     transform: translateY(-2px);
+}
+
+/* --- Hamburger Menu Button --- */
+.hamburger {
+    display: none;
+    background: none;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 1.3rem;
+    align-items: center;
+    justify-content: center;
+    color: var(--body-color);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.hamburger:hover {
+    background-color: var(--card-bg);
 }
 
 /* --- Theme Toggle Button --- */
@@ -138,8 +160,8 @@ nav a:hover, nav a.active {
     border-radius: 16px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
     animation: fadeInUp 0.8s ease-out forwards;
-    position: relative; /* Establishes coordinate grid for cursor dot */
-    overflow: hidden; /* Keeps cursor dot inside borders */
+    position: relative;
+    overflow: hidden;
     transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -226,19 +248,25 @@ h2 {
     transform-origin: bottom left;
 }
 
-/* --- Spotify Widget Styles --- */
-#spotify-container {
+/* --- Activity Widgets Container (Spotify & Books) --- */
+#activity-widgets {
     position: relative;
     z-index: 1;
-    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 24px 0;
 }
 
-.spotify-widget {
+.activity-widget {
     display: inline-flex;
     align-items: center;
     gap: 14px;
     padding: 10px 18px;
-    max-width: 380px;
+    width: 100%;
+    max-width: 360px;
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 12px;
@@ -246,6 +274,7 @@ h2 {
     text-decoration: none;
     color: var(--body-color);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    box-sizing: border-box;
     transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -255,7 +284,13 @@ h2 {
     box-shadow: 0 6px 20px rgba(29, 185, 84, 0.15);
 }
 
-.spotify-album-art {
+.book-widget:hover {
+    transform: translateY(-2px);
+    border-color: #3b82f6;
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.15);
+}
+
+.widget-icon-img {
     width: 48px;
     height: 48px;
     border-radius: 8px;
@@ -263,21 +298,40 @@ h2 {
     flex-shrink: 0;
 }
 
-.spotify-info {
+.widget-icon-emoji {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: rgba(59, 130, 246, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.widget-info {
     text-align: left;
     overflow: hidden;
 }
 
-.spotify-header {
+.widget-header {
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #1DB954;
     margin-bottom: 2px;
 }
 
-.spotify-title {
+.spotify-header {
+    color: #1DB954;
+}
+
+.book-header {
+    color: #3b82f6;
+}
+
+.widget-title {
     font-weight: 600;
     color: var(--heading-color);
     white-space: nowrap;
@@ -285,7 +339,7 @@ h2 {
     text-overflow: ellipsis;
 }
 
-.spotify-artist {
+.widget-subtitle {
     font-size: 0.8rem;
     color: var(--subtitle-color);
     white-space: nowrap;
@@ -317,18 +371,14 @@ h2 {
     cursor: pointer;
     position: relative;
     overflow: hidden;
-
-    /* Base animation setup */
     opacity: 0;
     animation: fadeInUp 0.8s ease-out forwards;
 }
 
-/* Stagger the entry delays so they load in one after another */
 .hover-card:nth-child(1) { animation-delay: 0.3s; }
 .hover-card:nth-child(2) { animation-delay: 0.5s; }
 .hover-card:nth-child(3) { animation-delay: 0.7s; }
 
-/* Glass glare effect layer */
 .hover-card::before {
     content: "";
     position: absolute;
@@ -340,7 +390,6 @@ h2 {
     transition: all 0.6s ease;
 }
 
-/* Hover States */
 .hover-card:hover {
     transform: translateY(-10px) scale(1.03);
     box-shadow: 0 15px 35px rgba(59, 130, 246, 0.12);
@@ -371,7 +420,7 @@ h2 {
     transition: color 0.3s ease;
 }
 
-/* --- Skills Tags (Global for other pages) --- */
+/* --- Skills Tags --- */
 .skills-list {
     display: flex;
     flex-wrap: wrap;
@@ -405,7 +454,12 @@ h2 {
     color: #ffffff;
 }
 
-/* --- Tables & Lists (Global for other pages) --- */
+/* --- Tables & Lists --- */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
 table {
     width: 100%;
     border-collapse: separate;
@@ -470,27 +524,98 @@ ul.experience-list li {
     transform: translateX(3px);
 }
 
-/* --- Washing Aesthetic Cursor --- */
+/* --- Cursor Dot --- */
 .cursor-dot {
     position: absolute;
-    width: 500px; /* Large enough to create a wash effect */
+    width: 500px;
     height: 500px;
     background: var(--cursor-wash);
     border-radius: 50%;
     pointer-events: none; 
     transform: translate(-50%, -50%); 
-    opacity: 0; /* Starts hidden */
-    transition: opacity 0.4s ease-out; /* Smoothly fades out when stopped */
-    z-index: 0; /* Keeps it behind the text */
+    opacity: 0;
+    transition: opacity 0.4s ease-out;
+    z-index: 0;
 }
 
-/* Ensures your profile content sits above the wash */
 #main-container > img,
 #main-container > h1,
 #main-container > .contact-info,
-#main-container > #spotify-container,
+#main-container > #activity-widgets,
 #main-container > h2,
 #main-container > p {
     position: relative;
     z-index: 1;
+}
+
+/* --- Responsive Media Queries for Mobile View --- */
+@media (max-width: 768px) {
+    nav {
+        padding: 12px 20px;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--nav-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--nav-border);
+        padding: 15px 0;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        margin: 0;
+        z-index: 999;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links a {
+        margin: 10px 0;
+        font-size: 1.1em;
+    }
+
+    .theme-toggle {
+        position: static;
+        margin-left: auto;
+        margin-right: 15px;
+    }
+
+    .container {
+        margin: 20px 15px;
+        padding: 25px 20px;
+        border-radius: 12px;
+    }
+
+    h1 {
+        font-size: 2.2em;
+    }
+
+    .pfp {
+        width: 140px;
+        height: 140px;
+    }
+
+    .hover-cards-container {
+        padding: 0 15px;
+        margin: 30px auto;
+    }
+
+    #activity-widgets {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .activity-widget {
+        max-width: 100%;
+    }
 }
